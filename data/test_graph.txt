@@ -1,4 +1,9 @@
-4 3
-0 1
-1 2
-2 3
+addNode a
+addNode b
+addNode c
+addNode d
+addEdge a b
+addEdge c d
+addEdge c b
+removeEdge a b
+removeNode a
