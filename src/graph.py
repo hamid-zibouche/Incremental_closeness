@@ -140,3 +140,70 @@ class DynamicGraph:
         plt.axis('off')
         plt.tight_layout()
         plt.show()
+
+    def visualize_interactive(self, closeness_values=None, output_path="graph_interactive.html", physics=True):
+        """Génère une visualisation interactive (drag & zoom) avec PyVis.
+
+        Args:
+            closeness_values (dict|None): valeurs par nœud pour modifier taille/couleur.
+            output_path (str): chemin du fichier HTML généré.
+            physics (bool): activer le moteur physique (layout dynamique).
+
+        Résultat:
+            Fichier HTML interactif ouvrable dans un navigateur.
+        """
+        try:
+            from pyvis.network import Network
+        except ImportError:
+            print("PyVis n'est pas installé. Installez-le avec: pip install pyvis")
+            return
+
+        net = Network(height="750px", width="100%", directed=False, notebook=False, bgcolor="#000000", font_color="#FFFFFF")
+        net.toggle_physics(physics)
+
+        # Préparer normalisation pour la taille/couleur si closeness fourni
+        if closeness_values and len(closeness_values) > 0:
+            vals = [v for v in closeness_values.values() if isinstance(v, (int, float))]
+            if len(vals) == 0:
+                vmin = vmax = 0.0
+            else:
+                vmin, vmax = min(vals), max(vals)
+            span = (vmax - vmin) if vmax != vmin else 1.0
+        else:
+            vmin = 0.0
+            vmax = 1.0
+            span = 1.0
+
+        for n in self.G.nodes():
+            if closeness_values:
+                raw = closeness_values.get(n, vmin)
+                norm = (raw - vmin) / span
+                size = 15 + norm * 35  # taille entre 15 et 50
+                # Couleur gradient bleu->rouge
+                r = int(255 * norm)
+                b = int(255 * (1 - norm))
+                g = 80
+                color = f"rgb({r},{g},{b})"
+                title = f"Noeud {n}<br>Closeness={raw:.5f}"
+            else:
+                size = 20
+                color = "#66b3ff"
+                title = f"Noeud {n}"
+            net.add_node(str(n), label=str(n), title=title, color=color, size=size)
+
+        for u, v in self.G.edges():
+            net.add_edge(str(u), str(v))
+
+        # PyVis attend une chaîne JSON valide (pas de 'const options =').
+        options = {
+            "interaction": {"hover": True, "zoomView": True, "dragView": True},
+            "nodes": {"borderWidth": 1, "shape": "dot"},
+            "edges": {"color": {"color": "#ADADAD"}, "smooth": True},
+            "physics": {"stabilization": {"iterations": 120}}
+        }
+        import json
+        net.set_options(json.dumps(options))
+
+        # Générer le HTML
+        net.save_graph(output_path)
+        print(f"Visualisation interactive générée: {output_path}")

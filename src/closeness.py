@@ -31,7 +31,8 @@ def compute_closeness_centrality(graph, node):
     """
     Calcule la closeness centrality d'un nœud
     
-    Formule: CC(x) = 1 / Σ d(x,y) pour tous y ≠ x
+    Formule: CC(x) = (n-1) / Σ d(x,y) pour tous y ≠ x atteignables
+    Pour les graphes non connexes, on normalise par le nombre de nœuds atteignables
     
     Args:
         graph: networkx.Graph
@@ -45,9 +46,10 @@ def compute_closeness_centrality(graph, node):
     
     distances = bfs_distances(graph, node)
     
-    # Vérifier si le graphe est connexe depuis ce nœud
-    if len(distances) < graph.number_of_nodes():
-        # Graphe non connexe : on peut retourner 0 ou gérer autrement
+    # Nombre de nœuds atteignables (excluant le nœud lui-même)
+    reachable = len(distances) - 1  # -1 pour exclure le nœud source
+    
+    if reachable == 0:
         return 0.0
     
     # Somme des distances (en excluant la distance à soi-même qui est 0)
@@ -56,10 +58,20 @@ def compute_closeness_centrality(graph, node):
     if total_distance == 0:
         return 0.0
     
-    return 1.0 / total_distance
+    # Closeness normalisée : (nombre de nœuds atteignables) / somme des distances
+    # Puis on normalise par (n-1) pour avoir une valeur entre 0 et 1
+    closeness = reachable / total_distance
+    
+    # Normalisation optionnelle pour les graphes non connexes
+    # On multiplie par (reachable / (n-1)) pour tenir compte de la connexité
+    n = graph.number_of_nodes()
+    if n > 1:
+        closeness = closeness * (reachable / (n - 1))
+    
+    return closeness
 
 
-def compute_all_closeness_classical(graph):
+def compute_all_closeness_classical(graph, verbose=False):
     """
     Calcule la closeness centrality de TOUS les nœuds avec l'algo classique
     
@@ -67,14 +79,22 @@ def compute_all_closeness_classical(graph):
     
     Args:
         graph: networkx.Graph
+        verbose: afficher la progression
     
     Returns:
         dict: {node: closeness_centrality}
     """
     closeness = {}
+    nodes = list(graph.nodes())
+    total = len(nodes)
     
-    for node in graph.nodes():
+    for i, node in enumerate(nodes, 1):
         closeness[node] = compute_closeness_centrality(graph, node)
+        if verbose and i % 20 == 0:  # Afficher tous les 20 nœuds
+            print(f"  Progression: {i}/{total} nœuds traités ({100*i/total:.1f}%)")
+    
+    if verbose and total > 0:
+        print(f"  Terminé: {total}/{total} nœuds traités (100.0%)")
     
     return closeness
 

@@ -1,6 +1,7 @@
 import os
 from graph import DynamicGraph
 from closeness import compute_all_closeness_classical
+
 def lire_fichier(nom_fichier):
     with open(nom_fichier , "r" , encoding="utf-8") as f :
         #initialiser le graph
@@ -48,8 +49,28 @@ if __name__ == "__main__":
     data_dir = os.path.join(os.path.dirname(current_dir), "data")
     fichier = os.path.join(data_dir, "test_graph.txt")
 
+    print("\n=== Lecture du fichier d'actions ===")
     g = lire_fichier(fichier)
-        # Calculer la closeness
-    closeness = compute_all_closeness_classical(g.G)
-    g.visualize(closeness)
-    print("nombres de noueds :",len(g.get_nodes()))
+    
+    print(f"\n=== Graphe final ===")
+    print(f"Nombre de nœuds: {g.number_of_nodes()}")
+    print(f"Nombre d'arêtes: {g.number_of_edges()}")
+    
+    print("\n=== Calcul de la Closeness Centrality ===")
+    print("Cela peut prendre quelques secondes pour un grand graphe...")
+    closeness = compute_all_closeness_classical(g.G, verbose=True)
+    
+    print(f"Closeness calculée pour {len(closeness)} nœuds")
+    # Afficher les 5 nœuds avec les meilleures closeness
+    if closeness:
+        sorted_closeness = sorted(closeness.items(), key=lambda x: x[1], reverse=True)
+        print("\nTop 5 nœuds par closeness centrality:")
+        for i, (node, value) in enumerate(sorted_closeness[:5], 1):
+            print(f"  {i}. Nœud {node}: {value:.6f}")
+    
+    # Visualisation interactive (PyVis -> HTML)
+    print("\n=== Génération de la visualisation interactive ===")
+    try:
+        g.visualize_interactive(closeness, output_path="graph_interactive.html")
+    except Exception as e:
+        print("Visualisation interactive échouée:", e)
