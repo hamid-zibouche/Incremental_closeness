@@ -123,11 +123,60 @@ def generate_dynamic_actions_reserved(G: nx.Graph, steps: int = 200, seed: int |
 	return actions
 
 
+def generate_barabasi_albert_actions(num_nodes: int = 100, m: int = 3, 
+                                      num_actions: int = 200, seed: int | None = None) -> tuple[list[str], int, int]:
+	"""
+	Génère un graphe Barabási-Albert et une séquence d'actions dynamiques.
+	
+	Args:
+		num_nodes: Nombre de nœuds initiaux
+		m: Nombre d'arêtes ajoutées par nouveau nœud (>=1 et < num_nodes)
+		num_actions: Nombre d'actions dynamiques à générer
+		seed: Graine aléatoire
+	
+	Returns:
+		(actions, num_nodes_final, num_edges_final): Liste d'actions, nombre final de nœuds et arêtes
+	"""
+	# Générer le graphe initial
+	G = generate_social_graph(n_nodes=num_nodes, m=m, seed=seed)
+	
+	# Générer les actions dynamiques
+	actions = generate_dynamic_actions_reserved(G, steps=num_actions, seed=seed)
+	
+	# Compter les nœuds et arêtes finaux
+	nodes = set()
+	edges = set()
+	
+	for action in actions:
+		parts = action.split()
+		cmd = parts[0]
+		
+		if cmd == "addNode":
+			nodes.add(parts[1])
+		elif cmd == "addEdge":
+			u, v = parts[1], parts[2]
+			if u in nodes and v in nodes:
+				edges.add(tuple(sorted((u, v))))
+		elif cmd == "removeEdge":
+			u, v = parts[1], parts[2]
+			e = tuple(sorted((u, v)))
+			if e in edges:
+				edges.remove(e)
+		elif cmd == "removeNode":
+			n = parts[1]
+			if n in nodes:
+				nodes.remove(n)
+				# Supprimer les arêtes incidentes
+				edges = {e for e in edges if n not in e}
+	
+	return actions, len(nodes), len(edges)
+
+
 def main():
 	base, data = project_paths()
 
 	# 1) Générer un graphe de base type réseau social
-	G = generate_social_graph(n_nodes=4000, m=1, seed=2)
+	G = generate_social_graph(n_nodes=100, m=4, seed=2)
 
 	# 2) Générer le script d'actions compatible avec lecteur_graphe
 	actions = generate_dynamic_actions_reserved(G, steps=500, seed=7)
