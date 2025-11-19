@@ -1,14 +1,3 @@
-"""
-Implémentation EXACTE des algorithmes de l'article :
-Kas, M., Wachs, M., Carley, K. M., & Carley, L. R. (2013).
-"Incremental algorithm for updating betweenness centrality in dynamically growing networks"
-
-Basé sur Ramalingam & Reps (1996) pour les plus courts chemins dynamiques.
-
-Utilise un graphe ORIENTÉ et PONDÉRÉ comme dans l'article.
-Pour simuler un graphe non orienté : chaque arête u--v devient deux arêtes u→v et v→u.
-"""
-
 import networkx as nx
 import math
 from collections import deque
@@ -68,9 +57,9 @@ class IncrementalClosenessArticle:
         reachable = len(self.D.get(node, {})) - 1  # -1 pour exclure le nœud lui-même
         totdist = self.TotDist.get(node, 0)
         
-        # Le TotDist inclut la distance à soi-même (0), il faut la retirer
+        # Le TotDist inclut la distance à soi-même (0)
         if node in self.D.get(node, {}):
-            totdist -= self.D[node][node]  # Toujours 0, mais soyons explicites
+            totdist -= self.D[node][node] 
         
         if reachable == 0 or totdist == 0:
             self.C[node] = 0.0
@@ -291,7 +280,11 @@ class IncrementalClosenessArticle:
             self.D[node] = {node: 0}
             self.TotDist[node] = 0
             self.W[node] = {}
-            self._update_closeness(node)
+            
+            # IMPORTANT: Quand n change, la closeness de TOUS les nœuds doit être recalculée
+            # car la formule contient (reachable / (n-1)) où n = nombre total de nœuds
+            for s in self.G.nodes():
+                self._update_closeness(s)
     
     def remove_node(self, node):
         """Supprime un nœud et toutes ses arêtes incidentes."""

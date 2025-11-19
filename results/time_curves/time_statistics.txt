@@ -1,0 +1,194 @@
+================================================================================
+STATISTIQUES DE TEMPS - COMPARAISON INCRÉMENTAL VS CLASSIQUE
+================================================================================
+
+graphe_chaotique:
+  Nombre d'étapes: 2200
+
+  INCRÉMENTAL:
+    Temps total: 0.1352s
+    Temps moyen/étape: 0.0615ms
+    Temps médian/étape: 0.0558ms
+    Temps max/étape: 0.7107ms
+
+  CLASSIQUE:
+    Temps total: 0.0529s
+    Temps moyen/étape: 0.0241ms
+    Temps médian/étape: 0.0188ms
+    Temps max/étape: 0.1924ms
+
+  SPEEDUP: 0.39x
+
+--------------------------------------------------------------------------------
+
+graphe_croissance_stable:
+  Nombre d'étapes: 2300
+
+  INCRÉMENTAL:
+    Temps total: 11.0872s
+    Temps moyen/étape: 4.8205ms
+    Temps médian/étape: 0.6410ms
+    Temps max/étape: 130.6677ms
+
+  CLASSIQUE:
+    Temps total: 26.4313s
+    Temps moyen/étape: 11.4919ms
+    Temps médian/étape: 6.8277ms
+    Temps max/étape: 99.8020ms
+
+  SPEEDUP: 2.38x
+
+--------------------------------------------------------------------------------
+
+graphe_decroissance:
+  Nombre d'étapes: 1900
+
+  INCRÉMENTAL:
+    Temps total: 0.0731s
+    Temps moyen/étape: 0.0385ms
+    Temps médian/étape: 0.0330ms
+    Temps max/étape: 1.7176ms
+
+  CLASSIQUE:
+    Temps total: 0.0134s
+    Temps moyen/étape: 0.0070ms
+    Temps médian/étape: 0.0048ms
+    Temps max/étape: 0.0865ms
+
+  SPEEDUP: 0.18x
+
+--------------------------------------------------------------------------------
+
+graphe_equilibre:
+  Nombre d'étapes: 1500
+
+  INCRÉMENTAL:
+    Temps total: 0.7935s
+    Temps moyen/étape: 0.5290ms
+    Temps médian/étape: 0.1808ms
+    Temps max/étape: 9.4159ms
+
+  CLASSIQUE:
+    Temps total: 1.0158s
+    Temps moyen/étape: 0.6772ms
+    Temps médian/étape: 0.3458ms
+    Temps max/étape: 4.9472ms
+
+  SPEEDUP: 1.28x
+
+--------------------------------------------------------------------------------
+
+graphe_focus_aretes:
+  Nombre d'étapes: 2500
+
+  INCRÉMENTAL:
+    Temps total: 1.8215s
+    Temps moyen/étape: 0.7286ms
+    Temps médian/étape: 0.2598ms
+    Temps max/étape: 15.8818ms
+
+  CLASSIQUE:
+    Temps total: 2.0729s
+    Temps moyen/étape: 0.8292ms
+    Temps médian/étape: 0.4878ms
+    Temps max/étape: 4.4601ms
+
+  SPEEDUP: 1.14x
+
+--------------------------------------------------------------------------------
+
+graphe_focus_noeuds:
+  Nombre d'étapes: 1600
+
+  INCRÉMENTAL:
+    Temps total: 0.2118s
+    Temps moyen/étape: 0.1324ms
+    Temps médian/étape: 0.1132ms
+    Temps max/étape: 1.0557ms
+
+  CLASSIQUE:
+    Temps total: 0.1394s
+    Temps moyen/étape: 0.0871ms
+    Temps médian/étape: 0.0782ms
+    Temps max/étape: 0.6170ms
+
+  SPEEDUP: 0.66x
+
+--------------------------------------------------------------------------------
+
+graphe_forte_croissance:
+  Nombre d'étapes: 1700
+
+  INCRÉMENTAL:
+    Temps total: 9.3561s
+    Temps moyen/étape: 5.5036ms
+    Temps médian/étape: 0.7375ms
+    Temps max/étape: 278.9304ms
+
+  CLASSIQUE:
+    Temps total: 34.6716s
+    Temps moyen/étape: 20.3950ms
+    Temps médian/étape: 16.3769ms
+    Temps max/étape: 118.0103ms
+
+  SPEEDUP: 3.71x
+
+--------------------------------------------------------------------------------
+
+graphe_grand_sparse:
+  Nombre d'étapes: 3000
+
+  INCRÉMENTAL:
+    Temps total: 1.7629s
+    Temps moyen/étape: 0.5876ms
+    Temps médian/étape: 0.4492ms
+    Temps max/étape: 16.0453ms
+
+  CLASSIQUE:
+    Temps total: 3.3135s
+    Temps moyen/étape: 1.1045ms
+    Temps médian/étape: 0.9569ms
+    Temps max/étape: 7.4947ms
+
+  SPEEDUP: 1.88x
+
+--------------------------------------------------------------------------------
+
+graphe_petit_dense:
+  Nombre d'étapes: 1100
+
+  INCRÉMENTAL:
+    Temps total: 1.1289s
+    Temps moyen/étape: 1.0263ms
+    Temps médian/étape: 0.3338ms
+    Temps max/étape: 31.8434ms
+
+  CLASSIQUE:
+    Temps total: 1.8074s
+    Temps moyen/étape: 1.6431ms
+    Temps médian/étape: 1.0960ms
+    Temps max/étape: 7.5941ms
+
+  SPEEDUP: 1.60x
+
+--------------------------------------------------------------------------------
+
+graphe_tres_dynamique:
+  Nombre d'étapes: 2000
+
+  INCRÉMENTAL:
+    Temps total: 0.1252s
+    Temps moyen/étape: 0.0626ms
+    Temps médian/étape: 0.0577ms
+    Temps max/étape: 0.4199ms
+
+  CLASSIQUE:
+    Temps total: 0.0444s
+    Temps moyen/étape: 0.0222ms
+    Temps médian/étape: 0.0157ms
+    Temps max/étape: 0.2084ms
+
+  SPEEDUP: 0.35x
+
+--------------------------------------------------------------------------------
+

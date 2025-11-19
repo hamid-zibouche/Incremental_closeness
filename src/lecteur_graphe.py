@@ -1,6 +1,6 @@
 import os
 from graph import DynamicGraph
-from closeness import compute_all_closeness_classical
+from classical_closeness import compute_all_closeness_classical
 
 
 
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     # Exemple d'utilisation simple
     current_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(os.path.dirname(current_dir), "data")
-    fichier = os.path.join(data_dir, "test_graph.txt")
+    fichier = os.path.join(data_dir, "graphe_croissance.txt")
 
     print("\n=== Lecture du fichier d'actions ===")
     g = lire_fichier(fichier)

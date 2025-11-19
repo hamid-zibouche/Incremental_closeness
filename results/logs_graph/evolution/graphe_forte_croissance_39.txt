@@ -1,0 +1,23 @@
+# Nodes: 12
+n0
+n3
+n4
+n6
+n7
+n8
+n9
+n11
+n12
+n13
+n14
+n15
+# Edges: 4
+n0 n4
+n0 n7
+n0 n11
+n3 n8
+n4 n8
+n4 n13
+n6 n9
+n6 n7
+n8 n11

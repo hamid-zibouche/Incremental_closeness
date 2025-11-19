@@ -1,0 +1,11 @@
+# Nodes: 7
+n2
+n3
+n5
+n6
+n7
+n8
+n9
+# Edges: 1
+n2 n6
+n5 n6

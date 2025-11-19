@@ -1,0 +1,6 @@
+# Nodes: 4
+n6
+n8
+n9
+n10
+# Edges: 0

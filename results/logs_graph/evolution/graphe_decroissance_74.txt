@@ -1,0 +1,4 @@
+# Nodes: 2
+n26
+n27
+# Edges: 0

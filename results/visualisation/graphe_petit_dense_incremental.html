@@ -1,0 +1,222 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #000000;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 750px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "rgb(213,80,41)", "font": {"color": "#FFFFFF"}, "id": "7", "label": "7", "shape": "dot", "size": 44.30473372781066, "title": "Noeud 7\u003cbr\u003eCloseness=0.17273"}, {"color": "rgb(217,80,37)", "font": {"color": "#FFFFFF"}, "id": "20", "label": "20", "shape": "dot", "size": 44.8343373493976, "title": "Noeud 20\u003cbr\u003eCloseness=0.17585"}, {"color": "rgb(216,80,38)", "font": {"color": "#FFFFFF"}, "id": "23", "label": "23", "shape": "dot", "size": 44.6556886227545, "title": "Noeud 23\u003cbr\u003eCloseness=0.17479"}, {"color": "rgb(217,80,37)", "font": {"color": "#FFFFFF"}, "id": "31", "label": "31", "shape": "dot", "size": 44.8343373493976, "title": "Noeud 31\u003cbr\u003eCloseness=0.17585"}, {"color": "rgb(218,80,36)", "font": {"color": "#FFFFFF"}, "id": "32", "label": "32", "shape": "dot", "size": 44.92447129909367, "title": "Noeud 32\u003cbr\u003eCloseness=0.17638"}, {"color": "rgb(182,80,72)", "font": {"color": "#FFFFFF"}, "id": "33", "label": "33", "shape": "dot", "size": 40.07594936708861, "title": "Noeud 33\u003cbr\u003eCloseness=0.14780"}, {"color": "rgb(224,80,30)", "font": {"color": "#FFFFFF"}, "id": "37", "label": "37", "shape": "dot", "size": 45.76086956521739, "title": "Noeud 37\u003cbr\u003eCloseness=0.18131"}, {"color": "rgb(222,80,32)", "font": {"color": "#FFFFFF"}, "id": "53", "label": "53", "shape": "dot", "size": 45.570987654320994, "title": "Noeud 53\u003cbr\u003eCloseness=0.18019"}, {"color": "rgb(211,80,43)", "font": {"color": "#FFFFFF"}, "id": "57", "label": "57", "shape": "dot", "size": 43.961988304093566, "title": "Noeud 57\u003cbr\u003eCloseness=0.17071"}, {"color": "rgb(187,80,67)", "font": {"color": "#FFFFFF"}, "id": "59", "label": "59", "shape": "dot", "size": 40.79427083333334, "title": "Noeud 59\u003cbr\u003eCloseness=0.15203"}, {"color": "rgb(226,80,28)", "font": {"color": "#FFFFFF"}, "id": "63", "label": "63", "shape": "dot", "size": 46.14779874213837, "title": "Noeud 63\u003cbr\u003eCloseness=0.18359"}, {"color": "rgb(230,80,24)", "font": {"color": "#FFFFFF"}, "id": "64", "label": "64", "shape": "dot", "size": 46.64536741214059, "title": "Noeud 64\u003cbr\u003eCloseness=0.18652"}, {"color": "rgb(206,80,48)", "font": {"color": "#FFFFFF"}, "id": "65", "label": "65", "shape": "dot", "size": 43.300000000000004, "title": "Noeud 65\u003cbr\u003eCloseness=0.16680"}, {"color": "rgb(208,80,46)", "font": {"color": "#FFFFFF"}, "id": "70", "label": "70", "shape": "dot", "size": 43.62716763005781, "title": "Noeud 70\u003cbr\u003eCloseness=0.16873"}, {"color": "rgb(253,80,1)", "font": {"color": "#FFFFFF"}, "id": "71", "label": "71", "shape": "dot", "size": 49.75438596491229, "title": "Noeud 71\u003cbr\u003eCloseness=0.20485"}, {"color": "rgb(232,80,22)", "font": {"color": "#FFFFFF"}, "id": "72", "label": "72", "shape": "dot", "size": 46.95161290322581, "title": "Noeud 72\u003cbr\u003eCloseness=0.18833"}, {"color": "rgb(223,80,31)", "font": {"color": "#FFFFFF"}, "id": "75", "label": "75", "shape": "dot", "size": 45.6656346749226, "title": "Noeud 75\u003cbr\u003eCloseness=0.18075"}, {"color": "rgb(185,80,69)", "font": {"color": "#FFFFFF"}, "id": "76", "label": "76", "shape": "dot", "size": 40.3974358974359, "title": "Noeud 76\u003cbr\u003eCloseness=0.14970"}, {"color": "rgb(182,80,72)", "font": {"color": "#FFFFFF"}, "id": "77", "label": "77", "shape": "dot", "size": 40.07594936708861, "title": "Noeud 77\u003cbr\u003eCloseness=0.14780"}, {"color": "rgb(236,80,18)", "font": {"color": "#FFFFFF"}, "id": "82", "label": "82", "shape": "dot", "size": 47.47540983606558, "title": "Noeud 82\u003cbr\u003eCloseness=0.19141"}, {"color": "rgb(199,80,55)", "font": {"color": "#FFFFFF"}, "id": "85", "label": "85", "shape": "dot", "size": 42.36187845303868, "title": "Noeud 85\u003cbr\u003eCloseness=0.16127"}, {"color": "rgb(10,80,244)", "font": {"color": "#FFFFFF"}, "id": "86", "label": "86", "shape": "dot", "size": 16.437799390332415, "title": "Noeud 86\u003cbr\u003eCloseness=0.00847"}, {"color": "rgb(212,80,42)", "font": {"color": "#FFFFFF"}, "id": "88", "label": "88", "shape": "dot", "size": 44.218289085545734, "title": "Noeud 88\u003cbr\u003eCloseness=0.17222"}, {"color": "rgb(229,80,25)", "font": {"color": "#FFFFFF"}, "id": "89", "label": "89", "shape": "dot", "size": 46.44444444444445, "title": "Noeud 89\u003cbr\u003eCloseness=0.18534"}, {"color": "rgb(210,80,44)", "font": {"color": "#FFFFFF"}, "id": "92", "label": "92", "shape": "dot", "size": 43.87755102040817, "title": "Noeud 92\u003cbr\u003eCloseness=0.17021"}, {"color": "rgb(186,80,68)", "font": {"color": "#FFFFFF"}, "id": "96", "label": "96", "shape": "dot", "size": 40.594315245478036, "title": "Noeud 96\u003cbr\u003eCloseness=0.15086"}, {"color": "rgb(236,80,18)", "font": {"color": "#FFFFFF"}, "id": "98", "label": "98", "shape": "dot", "size": 47.47540983606558, "title": "Noeud 98\u003cbr\u003eCloseness=0.19141"}, {"color": "rgb(206,80,48)", "font": {"color": "#FFFFFF"}, "id": "99", "label": "99", "shape": "dot", "size": 43.300000000000004, "title": "Noeud 99\u003cbr\u003eCloseness=0.16680"}, {"color": "rgb(181,80,73)", "font": {"color": "#FFFFFF"}, "id": "100", "label": "100", "shape": "dot", "size": 39.949622166246854, "title": "Noeud 100\u003cbr\u003eCloseness=0.14706"}, {"color": "rgb(202,80,52)", "font": {"color": "#FFFFFF"}, "id": "103", "label": "103", "shape": "dot", "size": 42.74509803921569, "title": "Noeud 103\u003cbr\u003eCloseness=0.16353"}, {"color": "rgb(206,80,48)", "font": {"color": "#FFFFFF"}, "id": "107", "label": "107", "shape": "dot", "size": 43.3810888252149, "title": "Noeud 107\u003cbr\u003eCloseness=0.16728"}, {"color": "rgb(202,80,52)", "font": {"color": "#FFFFFF"}, "id": "110", "label": "110", "shape": "dot", "size": 42.74509803921569, "title": "Noeud 110\u003cbr\u003eCloseness=0.16353"}, {"color": "rgb(219,80,35)", "font": {"color": "#FFFFFF"}, "id": "113", "label": "113", "shape": "dot", "size": 45.10638297872341, "title": "Noeud 113\u003cbr\u003eCloseness=0.17745"}, {"color": "rgb(194,80,60)", "font": {"color": "#FFFFFF"}, "id": "114", "label": "114", "shape": "dot", "size": 41.69811320754717, "title": "Noeud 114\u003cbr\u003eCloseness=0.15736"}, {"color": "rgb(201,80,53)", "font": {"color": "#FFFFFF"}, "id": "116", "label": "116", "shape": "dot", "size": 42.66759776536313, "title": "Noeud 116\u003cbr\u003eCloseness=0.16308"}, {"color": "rgb(151,80,103)", "font": {"color": "#FFFFFF"}, "id": "117", "label": "117", "shape": "dot", "size": 35.765199161425585, "title": "Noeud 117\u003cbr\u003eCloseness=0.12239"}, {"color": "rgb(187,80,67)", "font": {"color": "#FFFFFF"}, "id": "120", "label": "120", "shape": "dot", "size": 40.72727272727273, "title": "Noeud 120\u003cbr\u003eCloseness=0.15164"}, {"color": "rgb(236,80,18)", "font": {"color": "#FFFFFF"}, "id": "124", "label": "124", "shape": "dot", "size": 47.47540983606558, "title": "Noeud 124\u003cbr\u003eCloseness=0.19141"}, {"color": "rgb(191,80,63)", "font": {"color": "#FFFFFF"}, "id": "125", "label": "125", "shape": "dot", "size": 41.343085106382986, "title": "Noeud 125\u003cbr\u003eCloseness=0.15527"}, {"color": "rgb(222,80,32)", "font": {"color": "#FFFFFF"}, "id": "126", "label": "126", "shape": "dot", "size": 45.47692307692308, "title": "Noeud 126\u003cbr\u003eCloseness=0.17963"}, {"color": "rgb(194,80,60)", "font": {"color": "#FFFFFF"}, "id": "127", "label": "127", "shape": "dot", "size": 41.69811320754717, "title": "Noeud 127\u003cbr\u003eCloseness=0.15736"}, {"color": "rgb(220,80,34)", "font": {"color": "#FFFFFF"}, "id": "129", "label": "129", "shape": "dot", "size": 45.19817073170732, "title": "Noeud 129\u003cbr\u003eCloseness=0.17799"}, {"color": "rgb(245,80,9)", "font": {"color": "#FFFFFF"}, "id": "130", "label": "130", "shape": "dot", "size": 48.69047619047619, "title": "Noeud 130\u003cbr\u003eCloseness=0.19858"}, {"color": "rgb(235,80,19)", "font": {"color": "#FFFFFF"}, "id": "132", "label": "132", "shape": "dot", "size": 47.26384364820848, "title": "Noeud 132\u003cbr\u003eCloseness=0.19017"}, {"color": "rgb(229,80,25)", "font": {"color": "#FFFFFF"}, "id": "133", "label": "133", "shape": "dot", "size": 46.44444444444445, "title": "Noeud 133\u003cbr\u003eCloseness=0.18534"}, {"color": "rgb(199,80,55)", "font": {"color": "#FFFFFF"}, "id": "135", "label": "135", "shape": "dot", "size": 42.437673130193915, "title": "Noeud 135\u003cbr\u003eCloseness=0.16172"}, {"color": "rgb(182,80,72)", "font": {"color": "#FFFFFF"}, "id": "136", "label": "136", "shape": "dot", "size": 40.07594936708861, "title": "Noeud 136\u003cbr\u003eCloseness=0.14780"}, {"color": "rgb(179,80,75)", "font": {"color": "#FFFFFF"}, "id": "137", "label": "137", "shape": "dot", "size": 39.700748129675816, "title": "Noeud 137\u003cbr\u003eCloseness=0.14559"}, {"color": "rgb(233,80,21)", "font": {"color": "#FFFFFF"}, "id": "138", "label": "138", "shape": "dot", "size": 47.055016181229774, "title": "Noeud 138\u003cbr\u003eCloseness=0.18894"}, {"color": "rgb(198,80,56)", "font": {"color": "#FFFFFF"}, "id": "140", "label": "140", "shape": "dot", "size": 42.21153846153847, "title": "Noeud 140\u003cbr\u003eCloseness=0.16039"}, {"color": "rgb(210,80,44)", "font": {"color": "#FFFFFF"}, "id": "141", "label": "141", "shape": "dot", "size": 43.87755102040817, "title": "Noeud 141\u003cbr\u003eCloseness=0.17021"}, {"color": "rgb(139,80,115)", "font": {"color": "#FFFFFF"}, "id": "143", "label": "143", "shape": "dot", "size": 34.08477842003854, "title": "Noeud 143\u003cbr\u003eCloseness=0.11249"}, {"color": "rgb(181,80,73)", "font": {"color": "#FFFFFF"}, "id": "144", "label": "144", "shape": "dot", "size": 39.949622166246854, "title": "Noeud 144\u003cbr\u003eCloseness=0.14706"}, {"color": "rgb(255,80,0)", "font": {"color": "#FFFFFF"}, "id": "146", "label": "146", "shape": "dot", "size": 50.0, "title": "Noeud 146\u003cbr\u003eCloseness=0.20629"}, {"color": "rgb(216,80,38)", "font": {"color": "#FFFFFF"}, "id": "147", "label": "147", "shape": "dot", "size": 44.74474474474475, "title": "Noeud 147\u003cbr\u003eCloseness=0.17532"}, {"color": "rgb(181,80,73)", "font": {"color": "#FFFFFF"}, "id": "150", "label": "150", "shape": "dot", "size": 39.949622166246854, "title": "Noeud 150\u003cbr\u003eCloseness=0.14706"}, {"color": "rgb(216,80,38)", "font": {"color": "#FFFFFF"}, "id": "153", "label": "153", "shape": "dot", "size": 44.74474474474475, "title": "Noeud 153\u003cbr\u003eCloseness=0.17532"}, {"color": "rgb(214,80,40)", "font": {"color": "#FFFFFF"}, "id": "155", "label": "155", "shape": "dot", "size": 44.391691394658764, "title": "Noeud 155\u003cbr\u003eCloseness=0.17324"}, {"color": "rgb(238,80,16)", "font": {"color": "#FFFFFF"}, "id": "156", "label": "156", "shape": "dot", "size": 47.689768976897696, "title": "Noeud 156\u003cbr\u003eCloseness=0.19268"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "158", "label": "158", "shape": "dot", "size": 15.0, "title": "Noeud 158\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(209,80,45)", "font": {"color": "#FFFFFF"}, "id": "160", "label": "160", "shape": "dot", "size": 43.793604651162795, "title": "Noeud 160\u003cbr\u003eCloseness=0.16971"}, {"color": "rgb(244,80,10)", "font": {"color": "#FFFFFF"}, "id": "161", "label": "161", "shape": "dot", "size": 48.57627118644068, "title": "Noeud 161\u003cbr\u003eCloseness=0.19790"}, {"color": "rgb(229,80,25)", "font": {"color": "#FFFFFF"}, "id": "162", "label": "162", "shape": "dot", "size": 46.54458598726115, "title": "Noeud 162\u003cbr\u003eCloseness=0.18593"}, {"color": "rgb(193,80,61)", "font": {"color": "#FFFFFF"}, "id": "163", "label": "163", "shape": "dot", "size": 41.626344086021504, "title": "Noeud 163\u003cbr\u003eCloseness=0.15694"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "164", "label": "164", "shape": "dot", "size": 15.0, "title": "Noeud 164\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(204,80,50)", "font": {"color": "#FFFFFF"}, "id": "165", "label": "165", "shape": "dot", "size": 43.05949008498584, "title": "Noeud 165\u003cbr\u003eCloseness=0.16539"}, {"color": "rgb(173,80,81)", "font": {"color": "#FFFFFF"}, "id": "166", "label": "166", "shape": "dot", "size": 38.867469879518076, "title": "Noeud 166\u003cbr\u003eCloseness=0.14068"}, {"color": "rgb(182,80,72)", "font": {"color": "#FFFFFF"}, "id": "168", "label": "168", "shape": "dot", "size": 40.07594936708861, "title": "Noeud 168\u003cbr\u003eCloseness=0.14780"}, {"color": "rgb(242,80,12)", "font": {"color": "#FFFFFF"}, "id": "172", "label": "172", "shape": "dot", "size": 48.35016835016836, "title": "Noeud 172\u003cbr\u003eCloseness=0.19657"}, {"color": "rgb(165,80,89)", "font": {"color": "#FFFFFF"}, "id": "173", "label": "173", "shape": "dot", "size": 37.66590389016018, "title": "Noeud 173\u003cbr\u003eCloseness=0.13360"}, {"color": "rgb(179,80,75)", "font": {"color": "#FFFFFF"}, "id": "176", "label": "176", "shape": "dot", "size": 39.57816377171216, "title": "Noeud 176\u003cbr\u003eCloseness=0.14487"}, {"color": "rgb(211,80,43)", "font": {"color": "#FFFFFF"}, "id": "177", "label": "177", "shape": "dot", "size": 43.961988304093566, "title": "Noeud 177\u003cbr\u003eCloseness=0.17071"}, {"color": "rgb(210,80,44)", "font": {"color": "#FFFFFF"}, "id": "178", "label": "178", "shape": "dot", "size": 43.87755102040817, "title": "Noeud 178\u003cbr\u003eCloseness=0.17021"}, {"color": "rgb(163,80,91)", "font": {"color": "#FFFFFF"}, "id": "179", "label": "179", "shape": "dot", "size": 37.46031746031746, "title": "Noeud 179\u003cbr\u003eCloseness=0.13238"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "181", "label": "181", "shape": "dot", "size": 15.0, "title": "Noeud 181\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(195,80,59)", "font": {"color": "#FFFFFF"}, "id": "182", "label": "182", "shape": "dot", "size": 41.770270270270274, "title": "Noeud 182\u003cbr\u003eCloseness=0.15779"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "183", "label": "183", "shape": "dot", "size": 15.0, "title": "Noeud 183\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(153,80,101)", "font": {"color": "#FFFFFF"}, "id": "184", "label": "184", "shape": "dot", "size": 36.11940298507463, "title": "Noeud 184\u003cbr\u003eCloseness=0.12448"}, {"color": "rgb(209,80,45)", "font": {"color": "#FFFFFF"}, "id": "185", "label": "185", "shape": "dot", "size": 43.71014492753624, "title": "Noeud 185\u003cbr\u003eCloseness=0.16922"}, {"color": "rgb(10,80,244)", "font": {"color": "#FFFFFF"}, "id": "186", "label": "186", "shape": "dot", "size": 16.437799390332415, "title": "Noeud 186\u003cbr\u003eCloseness=0.00847"}, {"color": "rgb(192,80,62)", "font": {"color": "#FFFFFF"}, "id": "187", "label": "187", "shape": "dot", "size": 41.413333333333334, "title": "Noeud 187\u003cbr\u003eCloseness=0.15568"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "188", "label": "188", "shape": "dot", "size": 15.0, "title": "Noeud 188\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "189", "label": "189", "shape": "dot", "size": 15.0, "title": "Noeud 189\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(10,80,244)", "font": {"color": "#FFFFFF"}, "id": "191", "label": "191", "shape": "dot", "size": 16.437799390332415, "title": "Noeud 191\u003cbr\u003eCloseness=0.00847"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "192", "label": "192", "shape": "dot", "size": 15.0, "title": "Noeud 192\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(201,80,53)", "font": {"color": "#FFFFFF"}, "id": "193", "label": "193", "shape": "dot", "size": 42.66759776536313, "title": "Noeud 193\u003cbr\u003eCloseness=0.16308"}, {"color": "rgb(176,80,78)", "font": {"color": "#FFFFFF"}, "id": "195", "label": "195", "shape": "dot", "size": 39.21760391198044, "title": "Noeud 195\u003cbr\u003eCloseness=0.14274"}, {"color": "rgb(176,80,78)", "font": {"color": "#FFFFFF"}, "id": "196", "label": "196", "shape": "dot", "size": 39.15853658536586, "title": "Noeud 196\u003cbr\u003eCloseness=0.14239"}, {"color": "rgb(159,80,95)", "font": {"color": "#FFFFFF"}, "id": "197", "label": "197", "shape": "dot", "size": 36.86534216335541, "title": "Noeud 197\u003cbr\u003eCloseness=0.12888"}, {"color": "rgb(182,80,72)", "font": {"color": "#FFFFFF"}, "id": "198", "label": "198", "shape": "dot", "size": 40.01262626262627, "title": "Noeud 198\u003cbr\u003eCloseness=0.14743"}, {"color": "rgb(153,80,101)", "font": {"color": "#FFFFFF"}, "id": "199", "label": "199", "shape": "dot", "size": 36.11940298507463, "title": "Noeud 199\u003cbr\u003eCloseness=0.12448"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "200", "label": "200", "shape": "dot", "size": 15.0, "title": "Noeud 200\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(146,80,108)", "font": {"color": "#FFFFFF"}, "id": "201", "label": "201", "shape": "dot", "size": 35.17311608961303, "title": "Noeud 201\u003cbr\u003eCloseness=0.11890"}, {"color": "rgb(10,80,244)", "font": {"color": "#FFFFFF"}, "id": "202", "label": "202", "shape": "dot", "size": 16.437799390332415, "title": "Noeud 202\u003cbr\u003eCloseness=0.00847"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "204", "label": "204", "shape": "dot", "size": 15.0, "title": "Noeud 204\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "206", "label": "206", "shape": "dot", "size": 15.0, "title": "Noeud 206\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "207", "label": "207", "shape": "dot", "size": 15.0, "title": "Noeud 207\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(137,80,117)", "font": {"color": "#FFFFFF"}, "id": "208", "label": "208", "shape": "dot", "size": 33.93881453154876, "title": "Noeud 208\u003cbr\u003eCloseness=0.11163"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "209", "label": "209", "shape": "dot", "size": 15.0, "title": "Noeud 209\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "210", "label": "210", "shape": "dot", "size": 15.0, "title": "Noeud 210\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(191,80,63)", "font": {"color": "#FFFFFF"}, "id": "211", "label": "211", "shape": "dot", "size": 41.27320954907162, "title": "Noeud 211\u003cbr\u003eCloseness=0.15486"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "212", "label": "212", "shape": "dot", "size": 15.0, "title": "Noeud 212\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "213", "label": "213", "shape": "dot", "size": 15.0, "title": "Noeud 213\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "214", "label": "214", "shape": "dot", "size": 15.0, "title": "Noeud 214\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "215", "label": "215", "shape": "dot", "size": 15.0, "title": "Noeud 215\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "216", "label": "216", "shape": "dot", "size": 15.0, "title": "Noeud 216\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "217", "label": "217", "shape": "dot", "size": 15.0, "title": "Noeud 217\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "218", "label": "218", "shape": "dot", "size": 15.0, "title": "Noeud 218\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "219", "label": "219", "shape": "dot", "size": 15.0, "title": "Noeud 219\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "220", "label": "220", "shape": "dot", "size": 15.0, "title": "Noeud 220\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "221", "label": "221", "shape": "dot", "size": 15.0, "title": "Noeud 221\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "222", "label": "222", "shape": "dot", "size": 15.0, "title": "Noeud 222\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "223", "label": "223", "shape": "dot", "size": 15.0, "title": "Noeud 223\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "224", "label": "224", "shape": "dot", "size": 15.0, "title": "Noeud 224\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "225", "label": "225", "shape": "dot", "size": 15.0, "title": "Noeud 225\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "226", "label": "226", "shape": "dot", "size": 15.0, "title": "Noeud 226\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "227", "label": "227", "shape": "dot", "size": 15.0, "title": "Noeud 227\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "228", "label": "228", "shape": "dot", "size": 15.0, "title": "Noeud 228\u003cbr\u003eCloseness=0.00000"}, {"color": "rgb(0,80,255)", "font": {"color": "#FFFFFF"}, "id": "229", "label": "229", "shape": "dot", "size": 15.0, "title": "Noeud 229\u003cbr\u003eCloseness=0.00000"}]);
+                  edges = new vis.DataSet([{"from": "7", "to": "53"}, {"from": "7", "to": "163"}, {"from": "7", "to": "138"}, {"from": "20", "to": "59"}, {"from": "20", "to": "156"}, {"from": "20", "to": "89"}, {"from": "23", "to": "127"}, {"from": "23", "to": "63"}, {"from": "23", "to": "82"}, {"from": "31", "to": "98"}, {"from": "31", "to": "65"}, {"from": "31", "to": "130"}, {"from": "32", "to": "99"}, {"from": "32", "to": "71"}, {"from": "32", "to": "187"}, {"from": "33", "to": "70"}, {"from": "33", "to": "100"}, {"from": "37", "to": "132"}, {"from": "37", "to": "153"}, {"from": "37", "to": "99"}, {"from": "37", "to": "113"}, {"from": "53", "to": "71"}, {"from": "53", "to": "178"}, {"from": "57", "to": "63"}, {"from": "57", "to": "125"}, {"from": "57", "to": "116"}, {"from": "57", "to": "65"}, {"from": "59", "to": "65"}, {"from": "63", "to": "89"}, {"from": "63", "to": "75"}, {"from": "64", "to": "155"}, {"from": "64", "to": "136"}, {"from": "64", "to": "162"}, {"from": "64", "to": "156"}, {"from": "70", "to": "77"}, {"from": "70", "to": "146"}, {"from": "71", "to": "146"}, {"from": "71", "to": "172"}, {"from": "71", "to": "126"}, {"from": "72", "to": "116"}, {"from": "72", "to": "146"}, {"from": "72", "to": "82"}, {"from": "75", "to": "114"}, {"from": "75", "to": "120"}, {"from": "75", "to": "129"}, {"from": "75", "to": "103"}, {"from": "76", "to": "85"}, {"from": "76", "to": "114"}, {"from": "77", "to": "100"}, {"from": "82", "to": "126"}, {"from": "82", "to": "130"}, {"from": "85", "to": "161"}, {"from": "86", "to": "191"}, {"from": "88", "to": "133"}, {"from": "88", "to": "138"}, {"from": "89", "to": "130"}, {"from": "89", "to": "150"}, {"from": "92", "to": "162"}, {"from": "92", "to": "163"}, {"from": "92", "to": "133"}, {"from": "96", "to": "138"}, {"from": "96", "to": "184"}, {"from": "96", "to": "199"}, {"from": "98", "to": "172"}, {"from": "98", "to": "161"}, {"from": "100", "to": "110"}, {"from": "103", "to": "120"}, {"from": "103", "to": "107"}, {"from": "107", "to": "124"}, {"from": "107", "to": "176"}, {"from": "110", "to": "165"}, {"from": "110", "to": "153"}, {"from": "110", "to": "173"}, {"from": "113", "to": "195"}, {"from": "113", "to": "130"}, {"from": "113", "to": "185"}, {"from": "114", "to": "187"}, {"from": "117", "to": "168"}, {"from": "124", "to": "138"}, {"from": "124", "to": "156"}, {"from": "124", "to": "161"}, {"from": "125", "to": "165"}, {"from": "127", "to": "140"}, {"from": "127", "to": "197"}, {"from": "129", "to": "146"}, {"from": "129", "to": "196"}, {"from": "130", "to": "141"}, {"from": "130", "to": "193"}, {"from": "130", "to": "132"}, {"from": "132", "to": "141"}, {"from": "132", "to": "161"}, {"from": "133", "to": "144"}, {"from": "133", "to": "146"}, {"from": "133", "to": "168"}, {"from": "135", "to": "146"}, {"from": "135", "to": "179"}, {"from": "137", "to": "141"}, {"from": "137", "to": "176"}, {"from": "138", "to": "156"}, {"from": "140", "to": "156"}, {"from": "143", "to": "173"}, {"from": "146", "to": "160"}, {"from": "147", "to": "162"}, {"from": "147", "to": "172"}, {"from": "147", "to": "165"}, {"from": "153", "to": "155"}, {"from": "153", "to": "177"}, {"from": "153", "to": "166"}, {"from": "155", "to": "182"}, {"from": "160", "to": "178"}, {"from": "161", "to": "177"}, {"from": "161", "to": "211"}, {"from": "162", "to": "172"}, {"from": "162", "to": "198"}, {"from": "178", "to": "185"}, {"from": "179", "to": "208"}, {"from": "182", "to": "185"}, {"from": "185", "to": "193"}, {"from": "186", "to": "202"}, {"from": "195", "to": "201"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"interaction": {"hover": true, "zoomView": true, "dragView": true}, "nodes": {"borderWidth": 1, "shape": "dot"}, "edges": {"color": {"color": "#ADADAD"}, "smooth": true}, "physics": {"stabilization": {"iterations": 120}}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
